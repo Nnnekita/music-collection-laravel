@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топ-50 2026 — Музыкальная коллекция</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#ff1a40' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } }
+    </script>
+    <style>
+        .neon-glow { box-shadow: 0 0 6px rgba(255,26,64,0.7), 0 0 12px rgba(255,26,64,0.4); }
+        .neon-text { text-shadow: 0 0 4px rgba(255,26,64,0.6); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col">
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-gray-900 flex items-center gap-2 hover:text-primary transition neon-text">🎵 Музыкальная коллекция</a>
+            <a href="login.html" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:opacity-90 transition font-medium">Войти</a>
+        </nav>
+    </header>
+
+    <main class="flex-1 container mx-auto px-4 py-8">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div class="w-32 h-32 bg-gradient-to-br from-primary to-pink-600 rounded-xl flex items-center justify-center text-white text-4xl shadow-lg neon-glow">🎧</div>
+                <div class="flex-1">
+                    <span class="text-xs font-bold uppercase tracking-wider text-primary">Публичный плейлист</span>
+                    <h1 class="text-2xl md:text-3xl font-bold mt-1">Топ-50 2026</h1>
+                    <p class="text-gray-500 mt-1 text-sm">Самые популярные треки месяца. Обновлено: 01.05.2026</p>
+                    <div class="flex items-center gap-4 mt-4 text-sm">
+                        <span class="text-gray-700 font-medium">Автор: Редакция</span>
+                        <span class="text-gray-400">•</span>
+                        <span class="text-gray-500">4.2K подписчиков</span>
+                    </div>
+                    <div class="flex gap-3 mt-5">
+                        <button class="px-5 py-2 bg-primary text-white rounded-full font-medium hover:opacity-90 transition neon-glow">▶ Воспроизвести</button>
+                        <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-full hover:border-primary hover:text-primary transition">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 flex justify-between text-sm text-gray-500">
+                <span>50 треков • 3ч 12мин</span>
+                <span>Сортировка: По популярности ↓</span>
+            </div>
+            <div class="divide-y divide-gray-100">
+                <div class="flex items-center gap-4 px-4 py-3 hover:bg-red-50/50 transition group">
+                    <span class="w-6 text-center text-gray-400 text-sm group-hover:hidden">1</span>
+                    <span class="w-6 text-center text-primary hidden group-hover:block">▶</span>
+                    <img src="https://placehold.co/40x40/ff1a40/ffffff" class="w-10 h-10 rounded object-cover">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 truncate">Neon Lights</p>
+                        <p class="text-xs text-gray-500 truncate">Synthwave Project</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-primary transition">♡</button>
+                    <span class="text-sm text-gray-500">3:42</span>
+                </div>
+                <div class="flex items-center gap-4 px-4 py-3 hover:bg-red-50/50 transition group">
+                    <span class="w-6 text-center text-gray-400 text-sm group-hover:hidden">2</span>
+                    <span class="w-6 text-center text-primary hidden group-hover:block">▶</span>
+                    <img src="https://placehold.co/40x40/059669/ffffff" class="w-10 h-10 rounded object-cover">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 truncate">Forest Rain</p>
+                        <p class="text-xs text-gray-500 truncate">Acoustic Roots</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-primary transition">♡</button>
+                    <span class="text-sm text-gray-500">4:15</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 border-t border-gray-800 mt-auto text-center text-sm">&copy; 2026 Музыкальная коллекция</footer>
+</body>
+</html>

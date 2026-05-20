@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Музыкальная коллекция - ваша личная библиотека треков, альбомов и плейлистов">
+    <title>@yield('title', 'Музыкальная коллекция')</title>
+    
+    <!-- ⚠️ Tailwind CDN только для прототипирования. В Laravel используйте Vite + npm -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff1a40', // Неоново-красный
+                        primaryHover: '#e60f31',
+                        dark: '#0a0a0a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Неоновые эффекты */
+        .neon-glow { box-shadow: 0 0 5px #ff1a40, 0 0 10px rgba(255, 26, 64, 0.6); }
+        .neon-glow-hover:hover { box-shadow: 0 0 8px #ff1a40, 0 0 16px rgba(255, 26, 64, 0.8); transition: box-shadow 0.3s ease; }
+        /* .neon-text { text-shadow: 0 0 4px rgba(255, 26, 64, 0.7); } */
+        .neon-border { border-color: #ff1a40; box-shadow: inset 0 0 3px rgba(255, 26, 64, 0.4); }
+        
+        /* Плавное раскрытие фильтров на мобильных */
+        .filter-panel { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .filter-panel.open { max-height: 600px; }
+        
+        /* Кастомный скроллбар для эстетики */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff1a40; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- 📦 HEADER / NAVIGATION -->
+    <!-- В Laravel: @include('partials.header') -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
+            <a href="/" class="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-2 hover:text-primary transition duration-300 neon-text">
+                🎵 Музыкальная коллекция
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8 font-medium">
+                <a href="/" class="relative group py-2 text-gray-700 hover:text-primary transition">
+                    Главная
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="/albums" class="relative group py-2 text-gray-700 hover:text-primary transition">
+                    Альбомы
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="/artists" class="relative group py-2 text-gray-700 hover:text-primary transition">
+                    Исполнители
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="/playlists" class="relative group py-2 text-gray-700 hover:text-primary transition">
+                    Плейлисты
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <input type="search" placeholder="Поиск..." 
+                       class="hidden md:block px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-56 lg:w-72 bg-white/80 transition">
+                <a href="/login" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primaryHover neon-glow-hover font-medium transition">Войти</a>
+                
+                <!-- Mobile Toggle -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 hover:text-primary transition rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-3 shadow-lg">
+            <a href="/" class="block py-2 hover:text-primary font-medium border-b border-gray-100">Главная</a>
+            <a href="/albums" class="block py-2 hover:text-primary font-medium border-b border-gray-100">Альбомы</a>
+            <a href="/artists" class="block py-2 hover:text-primary font-medium border-b border-gray-100">Исполнители</a>
+            <a href="/playlists" class="block py-2 hover:text-primary font-medium">Плейлисты</a>
+            <input type="search" placeholder="Поиск..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+        </div>
+    </header>
+
+    <!-- 📦 MAIN CONTENT AREA -->
+    <!-- В Laravel: @yield('content') -->
+    <main class="flex-1 container mx-auto px-4 py-6 md:py-10 pb-16">
+        
+        <!-- Mobile Filter Toggle -->
+        <button id="mobile-filter-btn" class="md:hidden w-full mb-4 flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-primary transition active:scale-[0.99]">
+            <span class="font-medium text-gray-800">Фильтры и сортировка</span>
+            <span id="filter-arrow" class="text-primary transition-transform duration-300">▼</span>
+        </button>
+
+        <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6">
+            
+            <!-- 📂 SIDEBAR -->
+            <aside id="filters-panel" class="filter-panel lg:col-span-3 lg:max-h-none lg:overflow-visible lg:block">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 h-fit lg:sticky lg:top-24">
+                    <h3 class="font-bold text-lg mb-4 text-gray-900 neon-text">Фильтры</h3>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-2">Жанры</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="?genre=rock" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 transition text-sm">🎸 Рок</a></li>
+                            <li><a href="?genre=pop" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 transition text-sm">🎤 Поп</a></li>
+                            <li><a href="?genre=jazz" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 transition text-sm">🎷 Джаз</a></li>
+                            <li><a href="?genre=electronic" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 transition text-sm">🎛️ Электроника</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-2">Сортировка</h4>
+                        <select class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white text-sm transition">
+                            <option>По дате добавления ↓</option>
+                            <option>По названию А-Я</option>
+                            <option>По популярности</option>
+                        </select>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 📄 PAGE CONTENT -->
+            <section class="lg:col-span-9">
+                <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Все релизы</h1>
+                    <div class="flex gap-2 bg-white p-1 rounded-lg border border-gray-200">
+                        <button class="p-2 text-gray-500 rounded hover:text-primary hover:bg-red-50 transition" title="Сетка">⊞</button>
+                        <button class="p-2 bg-primary text-white rounded shadow-sm" title="Список">☰</button>
+                    </div>
+                </div>
+
+                <!-- 🎼 GRID OF CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Карточка 1 -->
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:neon-glow-hover transition-all duration-300 group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/ff1a40/ffffff?text=Album" alt="Обложка" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <button class="absolute bottom-3 right-3 bg-primary/90 backdrop-blur p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition duration-300 hover:neon-glow text-white">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <h3 class="font-semibold text-lg truncate text-gray-900 group-hover:text-primary transition">Midnight Echoes</h3>
+                        <p class="text-sm text-gray-500 truncate">The Nightwalkers • 2024</p>
+                        <div class="flex items-center justify-between mt-2 text-xs text-gray-400">
+                            <span>12 треков</span>
+                            <span>42 мин</span>
+                        </div>
+                    </article>
+
+                    <!-- Карточка 2 -->
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:neon-glow-hover transition-all duration-300 group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/10b981/ffffff?text=Album" alt="Обложка" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <button class="absolute bottom-3 right-3 bg-primary/90 backdrop-blur p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition duration-300 hover:neon-glow text-white"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5v14l11-7z"/></svg></button>
+                        </div>
+                        <h3 class="font-semibold text-lg truncate text-gray-900 group-hover:text-primary transition">Solar Flare</h3>
+                        <p class="text-sm text-gray-500 truncate">Nova Pulse • 2025</p>
+                        <div class="flex items-center justify-between mt-2 text-xs text-gray-400">
+                            <span>8 треков</span>
+                            <span>29 мин</span>
+                        </div>
+                    </article>
+
+                    <!-- Карточка 3 -->
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:neon-glow-hover transition-all duration-300 group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/f59e0b/ffffff?text=Album" alt="Обложка" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <button class="absolute bottom-3 right-3 bg-primary/90 backdrop-blur p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition duration-300 hover:neon-glow text-white"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5v14l11-7z"/></svg></button>
+                        </div>
+                        <h3 class="font-semibold text-lg truncate text-gray-900 group-hover:text-primary transition">Acoustic Sessions</h3>
+                        <p class="text-sm text-gray-500 truncate">Lena Voss • 2023</p>
+                        <div class="flex items-center justify-between mt-2 text-xs text-gray-400">
+                            <span>6 треков</span>
+                            <span>21 мин</span>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 📖 PAGINATION -->
+                <div class="flex items-center justify-center gap-2 mt-10 flex-wrap">
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition disabled:opacity-50 disabled:cursor-not-allowed text-sm">← Назад</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium neon-glow">1</button>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-primary transition text-sm">2</button>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-primary transition text-sm">3</button>
+                    <span class="px-2 text-gray-400">...</span>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-primary transition text-sm">14</button>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition text-sm">Вперёд →</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 📦 FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-10 border-t border-gray-800 mt-auto">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="md:col-span-2">
+                <h4 class="text-white font-semibold mb-3 text-lg neon-text">🎵 Музыкальная коллекция</h4>
+                <p class="text-sm leading-relaxed max-w-md text-gray-400">Управляйте своей медиатекой, создавайте плейлисты и открывайте новые треки. Проект построен на Laravel с фокусом на скорость и удобство.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-3">Разделы</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/" class="hover:text-primary transition">Главная</a></li>
+                    <li><a href="/albums" class="hover:text-primary transition">Альбомы</a></li>
+                    <li><a href="/artists" class="hover:text-primary transition">Исполнители</a></li>
+                    <li><a href="/playlists" class="hover:text-primary transition">Плейлисты</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-3">Информация</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/about" class="hover:text-primary transition">О проекте</a></li>
+                    <li><a href="/faq" class="hover:text-primary transition">FAQ</a></li>
+                    <li><a href="/privacy" class="hover:text-primary transition">Конфиденциальность</a></li>
+                    <li><a href="/contact" class="hover:text-primary transition">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-8 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs">
+            <p>&copy; 2026 Музыкальная коллекция. Все права защищены.</p>
+            <div class="flex gap-4 mt-3 md:mt-0">
+                <a href="#" class="hover:text-primary transition">Telegram</a>
+                <a href="#" class="hover:text-primary transition">GitHub</a>
+                <a href="#" class="hover:text-primary transition">VK</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ⚡ Интерактив -->
+    <script>
+        // Мобильное меню
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Мобильные фильтры (плавное раскрытие)
+        const filterBtn = document.getElementById('mobile-filter-btn');
+        const filterPanel = document.getElementById('filters-panel');
+        const filterArrow = document.getElementById('filter-arrow');
+
+        filterBtn.addEventListener('click', () => {
+            filterPanel.classList.toggle('open');
+            filterArrow.style.transform = filterPanel.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+
+        // Закрытие меню при клике вне его (опционально)
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('mobile-menu-btn');
+            if (!menu.contains(e.target) && !btn.contains(e.target) && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

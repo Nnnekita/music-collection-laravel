@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Альбомы — Музыкальная коллекция</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#ff1a40' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } }
+    </script>
+    <style>
+        .neon-glow { box-shadow: 0 0 6px rgba(255,26,64,0.7), 0 0 12px rgba(255,26,64,0.4); }
+        .neon-text { text-shadow: 0 0 4px rgba(255,26,64,0.6); }
+        .filter-panel { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .filter-panel.open { max-height: 500px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col">
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-gray-900 flex items-center gap-2 hover:text-primary transition neon-text">🎵 Музыкальная коллекция</a>
+            <div class="hidden md:flex items-center gap-8 font-medium">
+                <a href="index.html" class="text-gray-700 hover:text-primary transition">Главная</a>
+                <a href="albums.html" class="text-primary font-semibold border-b-2 border-primary pb-0.5">Альбомы</a>
+                <a href="artists.html" class="text-gray-700 hover:text-primary transition">Исполнители</a>
+                <a href="playlist.html" class="text-gray-700 hover:text-primary transition">Плейлисты</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <input type="search" placeholder="Поиск..." class="hidden md:block px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-56">
+                <a href="login.html" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:opacity-90 transition font-medium">Войти</a>
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-3 shadow-lg">
+            <a href="index.html" class="block py-2 hover:text-primary">Главная</a>
+            <a href="albums.html" class="block py-2 text-primary font-semibold">Альбомы</a>
+            <a href="artists.html" class="block py-2 hover:text-primary">Исполнители</a>
+            <a href="playlist.html" class="block py-2 hover:text-primary">Плейлисты</a>
+            <input type="search" placeholder="Поиск..." class="w-full px-3 py-2 border rounded-lg">
+        </div>
+    </header>
+
+    <main class="flex-1 container mx-auto px-4 py-6 md:py-10">
+        <button id="mobile-filter-btn" class="md:hidden w-full mb-4 flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-200">
+            <span class="font-medium">Фильтры и сортировка</span><span id="filter-arrow" class="text-primary">▼</span>
+        </button>
+        <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6">
+            <aside id="filters-panel" class="filter-panel lg:col-span-3 lg:max-h-none lg:block">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 lg:sticky lg:top-24">
+                    <h3 class="font-bold text-lg mb-4 neon-text">Фильтры</h3>
+                    <div class="space-y-1.5 mb-5">
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Жанры</p>
+                        <a href="#" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 text-sm">🎸 Рок</a>
+                        <a href="#" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 text-sm">🎤 Поп</a>
+                        <a href="#" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 text-sm">🎷 Джаз</a>
+                        <a href="#" class="block py-1.5 px-2 rounded hover:bg-red-50 hover:text-primary text-gray-700 text-sm">🎛️ Электроника</a>
+                    </div>
+                    <div class="space-y-1.5 mb-5">
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Год выпуска</p>
+                        <input type="range" min="1960" max="2026" class="w-full accent-primary">
+                        <div class="flex justify-between text-xs text-gray-500"><span>1960</span><span>2026</span></div>
+                    </div>
+                    <select class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary text-sm">
+                        <option>Сначала новые</option><option>Сначала старые</option><option>По популярности</option>
+                    </select>
+                </div>
+            </aside>
+            <section class="lg:col-span-9">
+                <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <h1 class="text-2xl md:text-3xl font-bold">Каталог альбомов</h1>
+                    <span class="text-sm text-gray-500">Найдено: 142</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:shadow-md transition group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/ff1a40/ffffff?text=Album+1" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        </div>
+                        <h3 class="font-semibold text-lg truncate group-hover:text-primary transition">Neon Horizons</h3>
+                        <p class="text-sm text-gray-500">Synthwave Project • 2024</p>
+                    </article>
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:shadow-md transition group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/1e293b/ffffff?text=Album+2" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        </div>
+                        <h3 class="font-semibold text-lg truncate group-hover:text-primary transition">Silent Streets</h3>
+                        <p class="text-sm text-gray-500">Urban Echo • 2025</p>
+                    </article>
+                    <article class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-primary hover:shadow-md transition group cursor-pointer">
+                        <div class="relative aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                            <img src="https://placehold.co/300x300/059669/ffffff?text=Album+3" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        </div>
+                        <h3 class="font-semibold text-lg truncate group-hover:text-primary transition">Forest Dreams</h3>
+                        <p class="text-sm text-gray-500">Acoustic Roots • 2023</p>
+                    </article>
+                </div>
+                <div class="flex items-center justify-center gap-2 mt-10 flex-wrap">
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white transition text-sm">← Назад</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium neon-glow">1</button>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-red-50 transition text-sm">2</button>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-red-50 transition text-sm">Вперёд →</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800 mt-auto">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-xs gap-3">
+            <p>&copy; 2026 Музыкальная коллекция</p>
+            <div class="flex gap-4"><a href="#" class="hover:text-primary">Telegram</a><a href="#" class="hover:text-primary">GitHub</a></div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+        const btn = document.getElementById('mobile-filter-btn'), panel = document.getElementById('filters-panel'), arrow = document.getElementById('filter-arrow');
+        btn.addEventListener('click', () => { panel.classList.toggle('open'); arrow.style.transform = panel.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0)'; });
+    </script>
+</body>
+</html>
