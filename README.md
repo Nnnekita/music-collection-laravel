@@ -7,9 +7,6 @@
 ### Главная страница
 ![Главная страница](docs/screenshots/home.png)
 
-### Каталог альбомов
-![Каталог альбомов](docs/screenshots/albums.png)
-
 ### Страница альбома
 ![Страница альбома](docs/screenshots/album.png)
 
