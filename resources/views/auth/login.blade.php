@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full max-w-md mx-auto">
         <div class="text-center mb-8">
-            <a href="{{ route('home') }}" class="text-2xl font-bold text-gray-900 neon-text flex items-center justify-center gap-2">🎵 Музыкальная коллекция</a>
+            <a href="{{ route('home') }}" class="text-2xl font-bold text-gray-900 flex items-center justify-center gap-2">🎵 Музыкальная коллекция</a>
             <p class="text-gray-500 mt-2">Войдите, чтобы управлять своей медиатекой</p>
         </div>
         

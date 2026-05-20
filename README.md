@@ -4,19 +4,23 @@
 
 ## Скриншоты
 
-> **Примечание:** Замените эти заглушки на реальные скриншоты вашего приложения.
-
 ### Главная страница
-![Главная страница](https://placehold.co/1200x600/0a0a0a/ff1a40?text=Главная+страница)
+![Главная страница](docs/screenshots/home.png)
 
 ### Каталог альбомов
-![Каталог альбомов](https://placehold.co/1200x600/0a0a0a/ff1a40?text=Каталог+альбомов)
+![Каталог альбомов](docs/screenshots/albums.png)
 
 ### Страница альбома
-![Страница альбома](https://placehold.co/1200x600/0a0a0a/ff1a40?text=Страница+альбома)
+![Страница альбома](docs/screenshots/album.png)
+
+### Страница входа
+![Вход](docs/screenshots/login.png)
 
 ### Админ-панель
-![Админ-панель](https://placehold.co/1200x600/0a0a0a/ff1a40?text=Админ-панель)
+![Админ-панель](docs/screenshots/admin_panel.png)
+
+### Редактирование в админ-панели
+![Редактирование](docs/screenshots/admin_panel_edit.png)
 
 ## Стек технологий
 
